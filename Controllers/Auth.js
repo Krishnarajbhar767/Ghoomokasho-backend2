@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Admin_Model = require("../models/Admin_Model");
-
+const Admin_Model = require("../Models/Admin_Model");
 
 const register = async (req, res) => {
     try {
@@ -16,7 +15,7 @@ const register = async (req, res) => {
             bio,
             location,
             website,
-            socialProfile
+            socialProfile,
         } = req.body;
 
         // Check if passwords match
@@ -44,15 +43,16 @@ const register = async (req, res) => {
             bio,
             location,
             website,
-            socialProfile
+            socialProfile,
         });
 
         // Save the user
         await newUser.save();
 
         // Success response
-        res.status(201).json({ message: `User registered with email ${email}` });
-
+        res.status(201).json({
+            message: `User registered with email ${email}`,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Something went wrong" });
@@ -61,7 +61,6 @@ const register = async (req, res) => {
 
 // user login api with ( username, email , password )
 const login = async (req, res) => {
-
     try {
         const { firstname, lastname, email, password } = req.body;
 
@@ -70,10 +69,11 @@ const login = async (req, res) => {
         console.log("User:", user);
 
         if (!user) {
-            return res.status(401).json({ message: `User with email ${email} not found` });
+            return res
+                .status(401)
+                .json({ message: `User with email ${email} not found` });
         }
 
-        
         // Validate password
         const isMatch = await bcrypt.compare(password, user.password);
         console.log("Password Match:", isMatch);
@@ -90,7 +90,6 @@ const login = async (req, res) => {
         );
 
         return res.status(200).json({ message: "Get Token", token });
-
     } catch (error) {
         console.error("Login Error:", error);
         return res.status(500).json({ message: "Something went wrong" });
@@ -99,5 +98,5 @@ const login = async (req, res) => {
 
 module.exports = {
     register,
-    login
-}
+    login,
+};
